@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.mainContainer {
+    display: flex;
+    flex-direction: column;
+    @apply min-h-screen;
+
+    background-image: url("../assets/dungeon-background.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
