@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import Head from "next/head";
 
 import { useEffect, useState, useContext } from "react";
 
@@ -60,6 +61,12 @@ const Navbar = () => {
 
   return (
     <>
+      <Head>
+        <title>Hackathons & Dragons</title>
+        <meta name="description" />
+        <link rel="icon" href="/dragon-icon.png" />
+      </Head>
+
       <navbar className="flex flex-row justify-between items-center mt-10 mx-16 z-20">
         <ul className="flex flex-row gap-20 text-3xl">
           <li className="blazing">
@@ -75,7 +82,7 @@ const Navbar = () => {
 
         {account.connected ? (
           <div className="flex flex-row justify-end gap-2">
-            {chain.chainId === "80001" && (
+            {chain.chainId !== 80001 && (
               <button onClick={switchNetwork} className="buttonStandar">
                 Wrong network, click to switch
               </button>

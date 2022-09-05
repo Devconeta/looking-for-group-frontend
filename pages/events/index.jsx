@@ -26,15 +26,15 @@ const Index = () => {
 
   const [modalOpen, setModalOpen] = useState(false);
 
-  const modalHandler = () => {
-    setModalOpen(!modalOpen);
-  };
-
   useEffect(() => {
     fetchTeams().then((teams) => {
       setTeams(teams);
     });
   }, []);
+
+  const modalHandler = () => {
+    setModalOpen(!modalOpen);
+  };
 
   return (
     <div className="eventContainer">
