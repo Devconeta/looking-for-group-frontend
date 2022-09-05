@@ -1,4 +1,5 @@
 import "../styles/globals.css";
+import "../styles/campfire.css";
 import "@rainbow-me/rainbowkit/styles.css";
 
 import {
