@@ -21,6 +21,26 @@ body {
     background-repeat: repeat;
 }
 
+.eventContainer {
+    display: flex;
+    flex-direction: column;
+    @apply min-h-screen;
+
+    background-image: url("../assets/tavern.jpg");
+    background-position: center;
+    background-repeat: repeat;
+}
+
+.eventContainer::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
 .mainContainer::before {
     content: "";
     position: absolute;
