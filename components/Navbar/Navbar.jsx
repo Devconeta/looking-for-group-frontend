@@ -1,25 +1,62 @@
 import Link from "next/link";
 import Image from "next/image";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 
 import { useAccount, useDisconnect } from "wagmi";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { truncAddress } from "../../utils/truncAddress";
+
+import { GeneralContext } from "../../context/generalContext";
+import { ethers } from "ethers";
 
 const Navbar = () => {
   const [account, setAccount] = useState({ address: null, connected: false });
   const [toggle, setToggle] = useState(false);
 
+  const { chain, setChain } = useContext(GeneralContext);
+
   const { address, status } = useAccount();
   const { disconnect } = useDisconnect();
 
   useEffect(() => {
+    console.log(chain);
+  }, [chain]);
+
+  useEffect(() => {
     if (status === "connected") {
+      getNework();
       setAccount({ address, connected: true });
     } else {
       setAccount({ address: null, connected: false });
     }
   }, [status]);
+
+  const getNework = async () => {
+    if (window.ethereum) {
+      const browserProvider = new ethers.providers.Web3Provider(
+        window.ethereum,
+        "any"
+      );
+
+      const network = await browserProvider.getNetwork();
+
+      setChain({ name: network.name, chainId: network.chainId });
+    }
+  };
+
+  const switchNetwork = async () => {
+    if (window.ethereum) {
+      try {
+        await window.ethereum.request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId: "0x13881" }],
+        });
+      } catch (error) {
+        alert("Please add the Polygon Mumbai Testnet.");
+      }
+    }
+  };
 
   return (
     <>
@@ -37,22 +74,29 @@ const Navbar = () => {
         </ul>
 
         {account.connected ? (
-          <div className="flex justify-center">
+          <div className="flex flex-row justify-end gap-2">
+            {chain.chainId === "80001" && (
+              <button onClick={switchNetwork} className="buttonStandar">
+                Wrong network, click to switch
+              </button>
+            )}
+
             <button
               onClick={() => {
                 setToggle(!toggle);
               }}
-              className="flex items-center p-1 backdrop-blur-lg border border-green-700 rounded-full hover:-translate-y-1 duration-150"
+              className="buttonStandar"
             >
+              <p>{address && truncAddress(address)}</p>
               <Image
-                width="40rem"
-                height="40rem"
+                width="28rem"
+                height="28rem"
                 src="/dragon.png"
                 alt="Dragon Icon"
               />
             </button>
             {toggle && (
-              <div className="flex flex-col items-center justify-center gap-2 absolute border border-green-700 mt-16 w-24  rounded-sm backdrop-blur-lg text-xl">
+              <div className="flex flex-col items-center justify-center gap-2 absolute border border-green-700 mt-12 w-24  rounded-sm backdrop-blur-lg text-xl">
                 <Link href="/profile">
                   <a className="flex pt-2 justify-center w-full">Profile</a>
                 </Link>
@@ -72,14 +116,11 @@ const Navbar = () => {
           <ConnectButton.Custom>
             {({ openConnectModal }) => {
               return (
-                <button
-                  onClick={openConnectModal}
-                  className="flex flex-row items-center gap-3 buttonStandar"
-                >
+                <button onClick={openConnectModal} className="buttonStandar">
                   <p>Connect Wallet</p>
                   <Image
-                    width="25rem"
-                    height="25rem"
+                    width="28rem"
+                    height="28rem"
                     src="/dragon.png"
                     alt="Dragon Icon"
                   />

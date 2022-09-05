@@ -2,6 +2,8 @@ import "../styles/globals.css";
 import "../styles/campfire.css";
 import "@rainbow-me/rainbowkit/styles.css";
 
+import { GeneralContextProvider } from "../context/generalContext";
+
 import {
   darkTheme,
   getDefaultWallets,
@@ -12,7 +14,7 @@ import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 
 const { chains, provider } = configureChains(
-  [chain.mainnet, chain.polygon, chain.optimism, chain.arbitrum],
+  [chain.polygonMumbai],
   [
     alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_KEY }),
     publicProvider(),
@@ -34,7 +36,9 @@ function MyApp({ Component, pageProps }) {
   return (
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider theme={darkTheme()} chains={chains}>
-        <Component {...pageProps} />
+        <GeneralContextProvider>
+          <Component {...pageProps} />
+        </GeneralContextProvider>
       </RainbowKitProvider>
     </WagmiConfig>
   );
