@@ -1,9 +1,9 @@
 import Head from "next/head";
-
 import Navbar from "../components/Navbar/Navbar";
-import FirstBlock from "../components/Landing/FirstBlock";
-
+import Hero from "../components/Landing/Hero";
 import { useState, useEffect } from "react";
+import Functionalities from "../components/Landing/Functionalities";
+import AppContainer from "../Containers/AppContainer";
 
 export default function Home() {
   const [firstRender, setFirstRender] = useState(true);
@@ -39,10 +39,11 @@ export default function Home() {
         <link rel="icon" href="/dragon-icon.png" />
       </Head>
 
-      <main className="mainContainer">
-        <Navbar />
-        <FirstBlock />
-      </main>
+      <AppContainer className="appContainer--landing">
+        <div className="absolute h-[30vh] bottom-0 left-0 right-0 bg-gradient-to-b from-transparent to-black " />
+        <Hero />
+      </AppContainer>
+      <Functionalities />
     </>
   );
 }
