@@ -90,16 +90,16 @@ const Navbar = () => {
 
           {/* Toggle Menu  */}
           {toggle && (
-            <div className="flex flex-col items-center justify-center gap-2 absolute border border-amber-700 mt-12 w-24 rounded-sm backdrop-blur-lg text-xl">
+            <div className="flex flex-col items-center justify-center absolute border border-white/30 mt-12 w-24 rounded-sm backdrop-blur-lg text-xl !cursor-pointer">
               <Link href="/profile">
-                <a className="flex pt-2 justify-center w-full">Profile</a>
+                <a className="flex pt-2 justify-center w-full ">Profile</a>
               </Link>
-              <div className="border-t-[0.1px] border-amber-700 w-full" />
+              <div className="border-t-[0.1px] border-white/30 w-full" />
               <button
                 onClick={() => {
                   disconnect();
                 }}
-                className="flex pb-2 justify-center w-full"
+                className="flex pb-2 justify-center w-full !cursor-pointer "
               >
                 Sign out
               </button>

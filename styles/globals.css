@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 body {
   font-family: "Rancho", cursive;
   color: white;
@@ -9,8 +10,8 @@ body {
 
 .buttonStandar {
   @apply flex items-center justify-center gap-2 py-1 px-5;
-  @apply tracking-widest text-xl rounded-sm border-orange-700 backdrop-blur-lg;
-  @apply hover:-translate-y-1 duration-150 border;
+  @apply tracking-widest text-xl rounded backdrop-blur-lg border-white/30 border;
+  @apply hover:-translate-y-1 duration-150 ;
 }
 
 .appContainer {
