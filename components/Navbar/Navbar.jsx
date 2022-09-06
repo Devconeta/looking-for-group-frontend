@@ -21,10 +21,6 @@ const Navbar = () => {
   const { disconnect } = useDisconnect();
 
   useEffect(() => {
-    console.log(chain);
-  }, [chain]);
-
-  useEffect(() => {
     if (status === "connected") {
       getNework();
       setAccount({ address, connected: true });
