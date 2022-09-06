@@ -10,7 +10,7 @@ const AppContainer = ({ className, children }) => {
         <header className="w-full">
           <Navbar />
         </header>
-        <main className="">{children}</main>
+        <main className="w-full">{children}</main>
       </div>
     </div>
   );
