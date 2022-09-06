@@ -2,107 +2,103 @@
 @tailwind components;
 @tailwind utilities;
 
+
 body {
-    font-family: 'Rancho', cursive;
-    color: white;
+  font-family: "Rancho", cursive;
+  color: white;
 }
 
 .buttonStandar {
-    @apply flex flex-row gap-2 items-center justify-center tracking-widest text-xl rounded-sm py-1 px-5 hover:-translate-y-1 duration-150 border border-green-700 backdrop-blur-lg
+  @apply flex items-center justify-center gap-2 py-1 px-5;
+  @apply tracking-widest text-xl rounded backdrop-blur-lg border-white/30 border;
+  @apply hover:-translate-y-1 duration-150 ;
 }
 
-.mainContainer {
-    display: flex;
-    flex-direction: column;
-    @apply min-h-screen;
+.appContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  width: full;
+  z-index: 0;
+  position: relative;
+}
 
-    background-image: url("../assets/dungeon-background.jpg");
-    background-position: center;
-    background-repeat: repeat;
+.appContainer--landing {
+  @apply appContainer;
+  background-image: url("/dragon-background.png");
+  background-size: cover;
+  height: 120vh;
+}
+
+.appContainer--landing::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  @apply bg-gradient-to-tr from-black/80 to-black/60;
+  backdrop-filter: blur(1px);
+  z-index: 10;
 }
 
 .eventContainer {
-    display: flex;
-    flex-direction: column;
-    @apply min-h-screen;
-
-    background-image: url("../assets/tavern.jpg");
-    background-position: center;
-    background-repeat: repeat;
+  display: flex;
+  flex-direction: column;
+  @apply min-h-screen;
+  background-image: url("../assets/tavern.jpg");
+  background-position: center;
+  background-repeat: repeat;
 }
 
 .eventContainer::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
-.mainContainer::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-}
-    
 .blazing:hover {
-    display: inline-block;
-    margin: 0;
-    
-    color: rgb(255, 115, 0);
-    outline: none;
-    vertical-align: middle;
-    
-    text-shadow:
-    0 3px 20px red,
-    0 0 20px red,
-    0 0 10px orange,
-    4px -5px 6px yellow,
-    -4px -10px 10px yellow,
-    0 -10px 30px yellow;
-    animation: 3s blazing infinite alternate linear;
-    }
-    
-@keyframes blazing {
-    0% { text-shadow: 0 3px 20px red, 0 0 20px red,
-    0 0 10px orange,
-    0 0 0 yellow,
-    0 0 5px yellow,
-    -2px -5px 5px yellow,
-    4px -10px 10px yellow; }
+  display: inline-block;
+  margin: 0;
 
-    25% { text-shadow: 0 3px 20px red, 0 0 30px red,
-    0 0 20px orange,
-    0 0 5px yellow,
-    -2px -5px 5px yellow,
-    3px -10px 10px yellow,
-    -4px -15px 20px yellow; }
+  color: rgb(255, 115, 0);
+  outline: none;
+  vertical-align: middle;
 
-    50% { text-shadow: 0 3px 20px red, 0 0 20px red,
-    0 -5px 10px orange,
-    -2px -5px 5px yellow,
-    3px -10px 10px yellow,
-    -4px -15px 20px yellow,
-    2px -20px 30px rgba(255,255,0,0.5); }
-
-    75% { text-shadow: 0 3px 20px red, 0 0 20px red,
-    0 -5px 10px orange,
-    3px -5px 5px yellow,
-    -4px -10px 10px yellow,
-    2px -20px 30px rgba(255,255,0,0.5),
-    0px -25px 40px rgba(255,255,0,0)}
-
-    100% { text-shadow: 0 3px 20px red, 0 0 20px red,
-    0 0 10px orange,
-    0 0 0 yellow,
-    0 0 5px yellow,
-    -2px -5px 5px yellow,
-    4px -10px 10px yellow; }
+  text-shadow: 0 3px 20px red, 0 0 20px red, 0 0 10px orange, 4px -5px 6px yellow,
+    -4px -10px 10px yellow, 0 -10px 30px yellow;
+  animation: 3s blazing infinite alternate linear;
 }
 
+@keyframes blazing {
+  0% {
+    text-shadow: 0 3px 20px red, 0 0 20px red, 0 0 10px orange, 0 0 0 yellow, 0 0 5px yellow,
+      -2px -5px 5px yellow, 4px -10px 10px yellow;
+  }
+
+  25% {
+    text-shadow: 0 3px 20px red, 0 0 30px red, 0 0 20px orange, 0 0 5px yellow, -2px -5px 5px yellow,
+      3px -10px 10px yellow, -4px -15px 20px yellow;
+  }
+
+  50% {
+    text-shadow: 0 3px 20px red, 0 0 20px red, 0 -5px 10px orange, -2px -5px 5px yellow,
+      3px -10px 10px yellow, -4px -15px 20px yellow, 2px -20px 30px rgba(255, 255, 0, 0.5);
+  }
+
+  75% {
+    text-shadow: 0 3px 20px red, 0 0 20px red, 0 -5px 10px orange, 3px -5px 5px yellow,
+      -4px -10px 10px yellow, 2px -20px 30px rgba(255, 255, 0, 0.5),
+      0px -25px 40px rgba(255, 255, 0, 0);
+  }
+
+  100% {
+    text-shadow: 0 3px 20px red, 0 0 20px red, 0 0 10px orange, 0 0 0 yellow, 0 0 5px yellow,
+      -2px -5px 5px yellow, 4px -10px 10px yellow;
+  }
+}
