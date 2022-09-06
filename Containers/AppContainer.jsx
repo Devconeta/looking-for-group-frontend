@@ -6,7 +6,7 @@ const AppContainer = ({ className, children }) => {
     // appContainer is 100% wider and sets the background for each page.
     <div className={`appContainer ${className}`}>
       {/* appSubcontainer is w-11/12 wider contains each page. */}
-      <div className="h-full w-11/12 z-10">
+      <div className="w-11/12 h-full z-10">
         <header className="w-full">
           <Navbar />
         </header>

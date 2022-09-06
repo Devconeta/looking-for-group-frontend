@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 
-import Navbar from "../../components/Navbar/Navbar";
 import Card from "../../components/Events/Card";
 
 import { fetchTeams } from "../api/index.js";
+import AppContainer from "../../Containers/AppContainer";
 
 const Index = () => {
   const [teams, setTeams] = useState([
@@ -26,27 +26,20 @@ const Index = () => {
 
   const [modalOpen, setModalOpen] = useState(false);
 
-  useEffect(() => {
-    fetchTeams().then((teams) => {
-      setTeams(teams);
-    });
-  }, []);
+  // useEffect(() => {
+  //   fetchTeams().then((teams) => {
+  //     setTeams(teams);
+  //   });
+  // }, []);
 
   const modalHandler = () => {
     setModalOpen(!modalOpen);
   };
 
   return (
-    <div className="eventContainer">
-      <Navbar />
-      <div className="flex absolute z-10 backdrop-blur-sm h-screen w-screen">
-        <div className="flex flex-row justify-center w-full mx-16 mt-32 border gap-10">
-          {teams.map((team, index) => {
-            return <Card key={index} team={team} modalHandler={modalHandler} />;
-          })}
-        </div>
-      </div>
-    </div>
+    <AppContainer className="appContainer--events">
+      <div className="flex flex-col h-[calc(100vh-5rem)] border">HOLA</div>
+    </AppContainer>
   );
 };
 

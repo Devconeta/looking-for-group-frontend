@@ -40,7 +40,7 @@ export default function Home() {
       </Head>
 
       <AppContainer className="appContainer--landing">
-        <div className="absolute h-[30vh] bottom-0 left-0 right-0 bg-gradient-to-b from-transparent to-black " />
+        <div className="absolute h-[30vh] bottom-0 left-0 right-0 bg-gradient-to-b from-transparent to-black" />
         <Hero />
       </AppContainer>
       <Functionalities />

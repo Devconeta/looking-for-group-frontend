@@ -19,13 +19,12 @@ body {
   flex-direction: column;
   align-items: center;
   height: 100%;
-  width: full;
+  width: 100%;
   z-index: 0;
   position: relative;
 }
 
 .appContainer--landing {
-  @apply appContainer;
   background-image: url("/dragon-background.png");
   background-size: cover;
   height: 120vh;
@@ -40,26 +39,23 @@ body {
   height: 100%;
   @apply bg-gradient-to-tr from-black/80 to-black/60;
   backdrop-filter: blur(1px);
-  z-index: 10;
+
 }
 
-.eventContainer {
-  display: flex;
-  flex-direction: column;
-  @apply min-h-screen;
-  background-image: url("../assets/tavern.jpg");
-  background-position: center;
+.appContainer--events {
+  background-image: url("/wood-pattern.jpg");
   background-repeat: repeat;
+  height: 100vh;
 }
 
-.eventContainer::before {
+.appContainer--events::before {
   content: "";
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: brightness(0.4) blur(1px) saturate(1.5);
 }
 
 .blazing:hover {

@@ -26,7 +26,10 @@ const Navbar = () => {
 
   const getNework = async () => {
     if (window.ethereum) {
-      const browserProvider = new ethers.providers.Web3Provider(window.ethereum, "any");
+      const browserProvider = new ethers.providers.Web3Provider(
+        window.ethereum,
+        "any"
+      );
       const network = await browserProvider.getNetwork();
       setChain({ name: network.name, chainId: network.chainId });
     }
@@ -46,7 +49,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="w-full flex justify-between items-center h-[5rem]  mx-auto">
+    <nav className="w-full flex justify-between items-center h-[5rem] mx-auto z-10">
       <ul className="flex flex-row gap-20 text-3xl">
         <li className="blazing">
           <Link href="/">Getting started</Link>
