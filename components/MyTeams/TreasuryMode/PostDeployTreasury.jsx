@@ -8,16 +8,16 @@ const PostDeployTreasury = ({ team }) => {
   const [onChainData, setOnChainData] = useState({});
   const [loading, setLoading] = useState(true);
 
-  // useEffect(() => {
-  //   OnChainGetTeamData(team.address)
-  //     .then((response) => {
-  //       setOnChainData(response);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     })
-  //     .finally(() => setLoading(false));
-  // }, []);
+  useEffect(() => {
+    OnChainGetTeamData(team.address)
+      .then(response => {
+        setOnChainData(response);
+      })
+      .catch(error => {
+        console.log(error);
+      })
+      .finally(() => setLoading(false));
+  }, []);
 
   return (
     !loading && (
@@ -33,11 +33,7 @@ const PostDeployTreasury = ({ team }) => {
                 <div className="flex items-center gap-1">
                   <Link href={`/user/${member[0]}`} className="">
                     <span className="flex cursor-pointer items-center">
-                      <img
-                        className="h-7 w-7 invert"
-                        src={"user.png"}
-                        alt="user icon"
-                      />
+                      <img className="h-7 w-7 invert" src={"user.png"} alt="user icon" />
                       {truncAddress(member[0])}
                     </span>
                   </Link>

@@ -12,11 +12,14 @@ export const OffChainContext = createContext();
 
 export const OffChainContextProvider = ({ children }) => {
   const [allTeams, setAllTeams] = useState([]);
-  const [userTeams, setUserTeams] = useState([]);
+
   const [userData, setUserData] = useState({});
-  const [loadingAppData, setLoadingAppData] = useState(true);
+  const [userTeams, setUserTeams] = useState([]);
+
   const [tagOptions, setTagOptions] = useState([]);
   const [roleOptions, setRoleOptions] = useState([]);
+
+  const [loadingAppData, setLoadingAppData] = useState(true);
 
   const { userWallet, firstRender } = useContext(ContractContext);
 
@@ -27,12 +30,12 @@ export const OffChainContextProvider = ({ children }) => {
       OffChainGetUserTeams(userWallet.address),
       OffChainGetAllTeams(),
     ])
-      .then((data) => {
+      .then(data => {
         setUserData(data[0]);
         setUserTeams(data[1]);
         setAllTeams(data[2]);
       })
-      .catch((error) => console.log(error))
+      .catch(error => console.log(error))
       .finally(() => {
         setLoadingAppData(false);
       });
@@ -42,20 +45,19 @@ export const OffChainContextProvider = ({ children }) => {
     if (!firstRender) {
       if (userWallet.connected) {
         getAppData();
-        Promise.all([OffChainGetTags(), OffChainGetRoles()]).then(
-          (response) => {
-            const tags = response[0].map((role) => {
-              return { value: role, label: role };
-            });
 
-            const roles = response[1].map((role) => {
-              return { value: role, label: role };
-            });
+        Promise.all([OffChainGetTags(), OffChainGetRoles()]).then(response => {
+          const tags = response[0].map(role => {
+            return { value: role, label: role };
+          });
 
-            setTagOptions(tags);
-            setRoleOptions(roles);
-          }
-        );
+          const roles = response[1].map(role => {
+            return { value: role, label: role };
+          });
+
+          setTagOptions(tags);
+          setRoleOptions(roles);
+        });
       }
     }
   }, [firstRender, userWallet]);
