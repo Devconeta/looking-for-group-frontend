@@ -29,8 +29,8 @@ export const OffChainCreateTeam = async (teamData) => {
 	return data
 }
 
-export const OffChainEditTeam = async (teamData) => {
-	const url = `${NEXT_PUBLIC_BASE_URL}/teams/${teamData.id}`
+export const OffChainEditTeam = async (teamData, teamId) => {
+	const url = `${NEXT_PUBLIC_BASE_URL}/teams/${teamId}`
 
 	const payload = {
 		address: teamData.deployerAddress,

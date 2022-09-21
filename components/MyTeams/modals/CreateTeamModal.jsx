@@ -118,6 +118,16 @@ const CreateTeamModal = ({
 		}
 	}
 
+	const closeModalHandler = () => {
+		setImage('')
+
+		if (createTeamModal) {
+			onCloseTeamCreation()
+		} else {
+			onCloseTeamEdition()
+		}
+	}
+
 	const onCreateTeam = async (event) => {
 		event.preventDefault()
 
@@ -170,8 +180,8 @@ const CreateTeamModal = ({
 					setCompressedFile('')
 					setSelectedRoles([])
 					setSelectedTags([])
-					setDefaultRoles([])
-					setDefaultTags([])
+					setDefaultValuesRole({})
+					setDefaultValuesTag({})
 					onCloseTeamCreation()
 				})
 		} else {
@@ -184,7 +194,10 @@ const CreateTeamModal = ({
 
 	const onEditTeam = async (event) => {
 		event.preventDefault()
+
 		let base64img = ''
+		let tags
+		let roles
 
 		if (
 			event.target.teamName.value !== '' &&
@@ -211,7 +224,7 @@ const CreateTeamModal = ({
 				lookingFor: roles,
 			}
 
-			OffChainEditTeam(teamData)
+			OffChainEditTeam(teamData, team.id)
 				.then((response) => {
 					toastSetter('Party edited with success', 'success')
 					refetch()
@@ -225,8 +238,8 @@ const CreateTeamModal = ({
 					setCompressedFile('')
 					setSelectedRoles([])
 					setSelectedTags([])
-					setDefaultRoles([])
-					setDefaultTags([])
+					setDefaultValuesRole({})
+					setDefaultValuesTag({})
 					onCloseTeamEdition()
 				})
 		} else {
@@ -253,11 +266,7 @@ const CreateTeamModal = ({
 								</h1>
 								<span
 									className="cursor-pointer text-xl text-white"
-									onClick={() => {
-										createTeamModal
-											? onCloseTeamCreation()
-											: onCloseTeamEdition()
-									}}
+									onClick={closeModalHandler}
 								>
 									X
 								</span>
@@ -344,7 +353,7 @@ const CreateTeamModal = ({
 																	width={142}
 																	height={142}
 																	src={
-																		team?.avatar !=
+																		image ==
 																		''
 																			? team?.avatar
 																			: image
