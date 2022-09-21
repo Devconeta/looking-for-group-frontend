@@ -1,0 +1,82 @@
+import { useEffect, useState, createContext, useContext } from "react";
+import { ContractContext } from "./contractContext";
+import {
+  OffChainGetUserData,
+  OffChainGetAllTeams,
+  OffChainGetUserTeams,
+  OffChainGetTags,
+  OffChainGetRoles,
+} from "../pages/api/offChain/get";
+
+export const OffChainContext = createContext();
+
+export const OffChainContextProvider = ({ children }) => {
+  const [allTeams, setAllTeams] = useState([]);
+  const [userTeams, setUserTeams] = useState([]);
+  const [userData, setUserData] = useState({});
+  const [loadingAppData, setLoadingAppData] = useState(true);
+  const [tagOptions, setTagOptions] = useState([]);
+  const [roleOptions, setRoleOptions] = useState([]);
+
+  const { userWallet, firstRender } = useContext(ContractContext);
+
+  const getAppData = () => {
+    setLoadingAppData(true);
+    Promise.all([
+      OffChainGetUserData(userWallet.address),
+      OffChainGetUserTeams(userWallet.address),
+      OffChainGetAllTeams(),
+    ])
+      .then((data) => {
+        setUserData(data[0]);
+        setUserTeams(data[1]);
+        setAllTeams(data[2]);
+      })
+      .catch((error) => console.log(error))
+      .finally(() => {
+        setLoadingAppData(false);
+      });
+  };
+
+  useEffect(() => {
+    if (!firstRender) {
+      if (userWallet.connected) {
+        getAppData();
+        Promise.all([OffChainGetTags(), OffChainGetRoles()]).then(
+          (response) => {
+            const tags = response[0].map((role) => {
+              return { value: role, label: role };
+            });
+
+            const roles = response[1].map((role) => {
+              return { value: role, label: role };
+            });
+
+            setTagOptions(tags);
+            setRoleOptions(roles);
+          }
+        );
+      }
+    }
+  }, [firstRender, userWallet]);
+
+  return (
+    !firstRender && (
+      <OffChainContext.Provider
+        value={{
+          allTeams,
+          userTeams,
+          userData,
+          setUserTeams,
+          setUserData,
+          getAppData,
+          loadingAppData,
+          tagOptions,
+          roleOptions,
+        }}
+      >
+        {children}
+      </OffChainContext.Provider>
+    )
+  );
+};
