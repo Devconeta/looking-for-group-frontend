@@ -292,11 +292,12 @@ const CreateTeamModal = ({
 													>
 														{image ? (
 															<Image
-																objectFit="cover"
 																width={142}
 																height={142}
 																src={image}
 																alt="team avatar"
+																objectFit="cover"
+																objectPosition="center"
 																style={{
 																	borderRadius:
 																		'100%',

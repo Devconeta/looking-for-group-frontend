@@ -1,4 +1,6 @@
 import Link from 'next/link'
+import Image from 'next/image'
+
 import { Tooltip } from '@nextui-org/react'
 
 import { truncAddress } from '../../../utils/truncAddress'
@@ -12,11 +14,19 @@ const TeamMode = ({ team, setTreasuryMode, setEditMode }) => {
 					{/* PHOTO BLOCK (LEFT) */}
 					<div className="flex w-[20%] max-w-[230px] flex-col items-center justify-center gap-[3%] ">
 						{team.avatar && team.avatar.length > 10 ? (
-							<img
-								src={team.avatar}
-								className="mb-3 w-full rounded-full"
-								alt="team image"
-							/>
+							<span className="flex justify-center items-center w-full h-full">
+								<Image
+									width={200}
+									height={200}
+									src={team.avatar}
+									alt="team image"
+									objectFit="cover"
+									objectPosition="center"
+									style={{
+										borderRadius: '100%',
+									}}
+								/>
+							</span>
 						) : (
 							<div className="mb-3 w-full h-full items-center justify-center flex rounded-full border-[1px] border-white/50 bg-white/15">
 								🦄
