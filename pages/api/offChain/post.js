@@ -100,7 +100,7 @@ export const OffChainJoinTeam = async (address, code) => {
 /* --------------- API calls for user things --------------- */
 
 export const OffChainModifyUserData = async (userAddress, newInformation) => {
-	const url = `${NEXT_PUBLIC_BASE_URL}/users/${userAddress};`
+	const url = `${NEXT_PUBLIC_BASE_URL}/users/${userAddress}`
 
 	const payload = {
 		name: newInformation.nickname,
@@ -122,9 +122,11 @@ export const OffChainModifyUserData = async (userAddress, newInformation) => {
 		body: JSON.stringify(payload),
 	})
 
-	const data = await response.json()
+	console.log(response)
 
-	return data
+	// const data = await response.json()
+
+	// return data
 }
 
 export const joinTeam = async (teamData) => {

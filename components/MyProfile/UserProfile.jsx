@@ -4,8 +4,11 @@ import Image from 'next/image'
 
 import { OffChainContext } from '../../context/offchainContext'
 import { ContractContext } from '../../context/contractContext'
-import { OffChainModifyUserData } from '../../pages/api/offChain/post.js'
+
 import { truncAddress } from '../../utils/truncAddress'
+import { imageCompressor } from '../../utils/compressor'
+import { convertToBase64 } from '../../utils/convertToBase64'
+import { OffChainModifyUserData } from '../../pages/api/offChain/post.js'
 
 const mockedData = {
 	name: 'lookingForGroup',
@@ -81,19 +84,65 @@ const UserProfile = () => {
 	const [editMode, setEditMode] = useState(false)
 	const [selectedTags, setSelectedTags] = useState([])
 	const [selectedRoles, setSelectedRoles] = useState([])
-	const [selectedTimezone, setSelectedTimezone] = useState('')
+	const [selectedTimezone, setSelectedTimezone] = useState([])
 
-	const coverInput = useRef()
-	const avatarInput = useRef()
+	const [imagesObjectURL, setImagesObjectURL] = useState({
+		avatarURL: '',
+		coverURL: '',
+	})
+
+	const [compressedAvatar, setCompressedAvatar] = useState('')
+	const [compressedCover, setCompressedCover] = useState('')
+
 	const nicknameInput = useRef()
 
-	const formHandler = (e) => {
+	console.log(userData)
+
+	const imageHandler = (event) => {
+		if (event.target.value.length > 0) {
+			const file = event.target.files[0]
+
+			if (file && file.type.substr(0, 5) === 'image') {
+				if (event.target.id === 'profileAvatar') {
+					setImagesObjectURL((prev) => ({
+						...prev,
+						avatarURL: URL.createObjectURL(file),
+					}))
+					imageCompressor(file, setCompressedAvatar)
+				} else {
+					setImagesObjectURL((prev) => {
+						return {
+							...prev,
+							coverURL: URL.createObjectURL(file),
+						}
+					})
+					imageCompressor(file, setCompressedCover)
+				}
+			}
+		}
+	}
+
+	const formHandler = async (e) => {
 		e.preventDefault()
+		let base64avatar = ''
+		let base64cover = ''
+
+		if (compressedAvatar) {
+			base64avatar = await convertToBase64(compressedAvatar)
+		}
+
+		if (compressedCover) {
+			base64cover = await convertToBase64(compressedCover)
+		}
+
+		const roles = selectedRoles.map((role) => role.value)
+		const tags = selectedTags.map((tag) => tag.value)
+		const timezone = selectedTimezone.map((timezone) => timezone.value)
 
 		const payload = {
 			nickname: nicknameInput.current.value,
-			avatar: avatarInput.current.files[0],
-			cover: coverInput.current.files[0],
+			avatar: base64avatar,
+			cover: base64cover,
 			socialLinks: [
 				e.target.discord.value,
 				e.target.twitter.value,
@@ -101,17 +150,15 @@ const UserProfile = () => {
 				e.target.linkedin.value,
 			],
 			level: e.target.level.value,
-			timezone: selectedTimezone,
+			timezone: timezone[0],
 			idea: e.target.idea.value,
-			roles: selectedRoles,
-			tags: selectedTags,
+			roles: roles,
+			tags: tags,
 		}
 
-		// OffChainModifyUserData(userWallet.address, payload).then((response) => {
-		// 	console.log(response)
-		//
-		// })
-		console.log(payload)
+		OffChainModifyUserData(userWallet.address, payload).then((response) => {
+			console.log(response)
+		})
 	}
 
 	return (
@@ -120,31 +167,130 @@ const UserProfile = () => {
 				<p className="text-4xl">Loading...</p>
 			) : (
 				<div className="relative">
-					{userData.cover ? (
-						<div className="h-60 w-full">
-							<Image
-								layout="fill"
-								objectFit="cover"
-								src={userData.cover}
-								alt="profile cover picture"
-							/>
-						</div>
-					) : (
-						<div className="h-60 w-full bg-neutral-900" />
-					)}
+					<div className="mb-[3.5rem]">
+						{editMode ? (
+							<div className="h-60 w-full bg-neutral-900">
+								<label
+									htmlFor="profileCover"
+									className="flex w-full h-full cursor-pointer"
+								>
+									{userData?.cover ||
+									imagesObjectURL.coverURL ? (
+										<div className="relative flex w-full h-full justify-center items-center">
+											<div className="absolute flex-col w-full h-full">
+												<div className="flex flex-col w-full h-full justify-center items-center">
+													<p>Select Cover </p>
+													🦄
+												</div>
+											</div>
+											<Image
+												objectFit="cover"
+												layout="fill"
+												src={
+													imagesObjectURL.coverURL ==
+													''
+														? userData?.cover
+														: imagesObjectURL.coverURL
+												}
+												alt="profile cover"
+												style={{
+													opacity: '0.5',
+												}}
+											/>
+										</div>
+									) : (
+										<div className="flex flex-col w-full h-full items-center justify-center">
+											<p>Select Cover </p>
+											🦄
+										</div>
+									)}
+								</label>
+								<input
+									id="profileCover"
+									type="file"
+									accept=".jpeg, .png, .jpg"
+									onChange={imageHandler}
+									className="hidden h-full w-full"
+								/>
+							</div>
+						) : (
+							<div className="h-60 w-full bg-neutral-900">
+								<div className="relative flex w-full h-full items-center justify-center">
+									{userData.cover && (
+										<Image
+											layout="fill"
+											objectFit="cover"
+											src={userData.cover}
+											alt="profile avatar"
+										/>
+									)}
+								</div>
+							</div>
+						)}
 
-					{userData.avatar ? (
-						<div className="absolute h-24 w-24 translate-y-[-60%] translate-x-[20%] rounded-full border-[2px] border-black bg-neutral-900">
-							<Image
-								layout="fill"
-								objectFit="cover"
-								src={userData.avatar}
-								alt="profile avatar"
-							/>
-						</div>
-					) : (
-						<div className="absolute h-24 w-24 translate-y-[-60%] translate-x-[20%] rounded-full border-[2px] border-black bg-neutral-900" />
-					)}
+						{editMode ? (
+							<div className="absolute h-48 w-48 translate-y-[-80%] translate-x-[20%] rounded-full border-[2px] border-black bg-neutral-900">
+								<label
+									htmlFor="profileAvatar"
+									className="cursor-pointer flex w-full h-full"
+								>
+									{userData?.avatar ||
+									imagesObjectURL.avatarURL ? (
+										<div className="relative flex items-center">
+											<div className="absolute flex-col w-full h-full">
+												<div className="flex flex-col w-full h-full justify-center items-center">
+													<p>Select Avatar </p>
+													🦄
+												</div>
+											</div>
+											<Image
+												objectFit="cover"
+												width={200}
+												height={200}
+												src={
+													imagesObjectURL.avatarURL ==
+													''
+														? userData?.avatar
+														: imagesObjectURL.avatarURL
+												}
+												alt="team avatar"
+												style={{
+													borderRadius: '100%',
+													opacity: '0.5',
+												}}
+											/>
+										</div>
+									) : (
+										<div className="flex flex-col w-full h-full items-center justify-center">
+											<p>Select Avatar </p>
+											🦄
+										</div>
+									)}
+									<input
+										id="profileAvatar"
+										type="file"
+										accept=".jpeg, .png, .jpg"
+										onChange={imageHandler}
+										className="hidden h-full w-full"
+									/>
+								</label>
+							</div>
+						) : (
+							<div className="absolute h-48 w-48 translate-y-[-80%] translate-x-[20%] rounded-full border-[2px] border-black bg-neutral-900">
+								{userData.avatar && (
+									<Image
+										layout="fill"
+										objectFit="cover"
+										src={userData.avatar}
+										alt="profile avatar"
+										style={{
+											borderRadius: '100%',
+										}}
+									/>
+								)}
+							</div>
+						)}
+					</div>
 
 					<div className="mt-11 flex flex-col gap-5 mb-14 border-red-500 px-2 text-base 2xl:text-lg">
 						<div className="flex flex-row gap-5 items-center border-b-[1px] border-white/10 pb-4">
@@ -346,6 +492,12 @@ const UserProfile = () => {
 												id="discord"
 												className="inputStandard"
 											/>
+											<button
+												type="submit"
+												className="ml-36 btn--yellow"
+											>
+												SUBMIT
+											</button>
 										</span>
 
 										<span className="flex gap-3 items-center">
