@@ -1,4 +1,4 @@
-import { useContext, useState, useRef } from 'react'
+import { useContext, useState, useRef, useEffect } from 'react'
 import Select from 'react-select'
 import Image from 'next/image'
 
@@ -9,7 +9,6 @@ import { truncAddress } from '../../utils/truncAddress'
 import { imageCompressor } from '../../utils/compressor'
 import { convertToBase64 } from '../../utils/convertToBase64'
 import { OffChainModifyUserData } from '../../pages/api/offChain/post.js'
-import { useEffect } from 'react'
 
 const customStyles = {
 	option: (provided, state) => ({
@@ -47,12 +46,6 @@ const customStyles = {
 	}),
 }
 
-const timezones = [
-	{ value: 'GMT-3', label: 'GMT-3' },
-	{ value: 'GMT-2', label: 'GMT-2' },
-	{ value: 'GMT-1', label: 'GMT-1' },
-]
-
 const UserProfile = ({ props }) => {
 	const { userWallet } = useContext(ContractContext)
 	const {
@@ -60,6 +53,15 @@ const UserProfile = ({ props }) => {
 		userTeams,
 		tagOptions,
 		roleOptions,
+		timezones = [
+			'GMT-3',
+			'GMT-2',
+			'GMT-1',
+			'GMT',
+			'GMT+1',
+			'GMT+2',
+			'GMT+3',
+		],
 		getAppData,
 		loadingAppData,
 	} = useContext(OffChainContext)
@@ -67,7 +69,6 @@ const UserProfile = ({ props }) => {
 	const [editMode, setEditMode] = useState(false)
 	const [selectedTags, setSelectedTags] = useState([])
 	const [selectedRoles, setSelectedRoles] = useState([])
-	const [selectedTimezone, setSelectedTimezone] = useState([])
 
 	const [imagesObjectURL, setImagesObjectURL] = useState({
 		avatarURL: '',
@@ -91,21 +92,14 @@ const UserProfile = ({ props }) => {
 				defaultTags = userData.tags.map((tag) => {
 					return { value: tag, label: tag }
 				})
+				setDefaultValuesTag({ defaultValue: defaultTags })
 			}
 
 			if (userData.roles.length > 0) {
 				defaultRoles = userData.roles.map((role) => {
 					return { value: role, label: role }
 				})
-			}
-
-			if (defaultRoles.length > 0 && defaultTags.length > 0) {
 				setDefaultValuesRole({ defaultValue: defaultRoles })
-				setDefaultValuesTag({ defaultValue: defaultTags })
-			} else if (defaultRoles.length > 0) {
-				setDefaultValuesRole({ defaultValue: defaultRoles })
-			} else if (defaultTags.length > 0) {
-				setDefaultValuesTag({ defaultValue: defaultTags })
 			}
 		}
 	}, [userData])
@@ -153,7 +147,6 @@ const UserProfile = ({ props }) => {
 
 		const roles = selectedRoles.map((role) => role.value)
 		const tags = selectedTags.map((tag) => tag.value)
-		const timezone = selectedTimezone.map((timezone) => timezone.value)
 
 		const payload = {
 			nickname: nicknameInput.current.value,
@@ -166,7 +159,7 @@ const UserProfile = ({ props }) => {
 				e.target.linkedin.value,
 			],
 			level: e.target.level.value,
-			timezone: timezone[0],
+			timezone: e.target.timezone.value,
 			idea: e.target.idea.value,
 			roles: roles,
 			tags: tags,
@@ -327,6 +320,7 @@ const UserProfile = ({ props }) => {
 										type="text"
 										placeholder="Nickname"
 										className="inputStandard"
+										defaultValue={userData?.name}
 										ref={nicknameInput}
 									/>
 								) : (
@@ -396,6 +390,7 @@ const UserProfile = ({ props }) => {
 										<select
 											id="level"
 											className="inputStandard"
+											defaultValue={userData?.level}
 										>
 											<option value="NEWBIE">
 												Newbie
@@ -424,16 +419,24 @@ const UserProfile = ({ props }) => {
 										Timezone
 									</p>
 									{editMode ? (
-										<Select
-											onChange={(options) => {
-												setSelectedTimezone(options)
-											}}
-											styles={customStyles}
-											options={timezones}
-											closeMenuOnSelect={false}
-											isMulti
-											isSearchable={false}
-										/>
+										<select
+											id="timezone"
+											className="inputStandard"
+											defaultValue={userData?.timezone}
+										>
+											{timezones
+												.sort()
+												.map((timezone, index) => {
+													return (
+														<option
+															key={index}
+															value={timezone}
+														>
+															{timezone}
+														</option>
+													)
+												})}
+										</select>
 									) : (
 										<p className>
 											{userData.timezone
@@ -489,6 +492,8 @@ const UserProfile = ({ props }) => {
 										<textarea
 											id="idea"
 											className="inputStandard"
+											placeholder="Tell us about your idea"
+											defaultValue={userData?.idea}
 										/>
 									) : (
 										<p className>
