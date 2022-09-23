@@ -70,8 +70,8 @@ const CreateTeamModal = ({
 		setLoading(true)
 
 		if (team) {
-			const defaultRoles = []
-			const defaultTags = []
+			let defaultRoles = []
+			let defaultTags = []
 
 			if (team.lookingFor.length > 0) {
 				defaultRoles = team.lookingFor.map((role) => {
