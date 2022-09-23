@@ -17,6 +17,21 @@ export const OffChainGetAllTeams = async () => {
 	return data
 }
 
+export const OffChainGetAllTeamsFiltered = async (filters) => {
+	let filterQuery = '?'
+	for (const key in filters) {
+		filterQuery =
+			filterQuery + 'filters[' + key + ']=' + filters[key].join() + '&'
+	}
+	console.log(`/teams${filterQuery}`)
+	const url = `${NEXT_PUBLIC_BASE_URL}/teams?${filters}`
+
+	const response = await fetch(url)
+	const data = await response.json()
+	console.log(data)
+	return data
+}
+
 export const OffChainGetUserTeams = async (userAddress) => {
 	const url = `${NEXT_PUBLIC_BASE_URL}/teams?address=${userAddress}`
 
