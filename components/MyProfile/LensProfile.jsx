@@ -129,7 +129,7 @@ const LensProfile = () => {
 			tags: tags,
 		}
 
-		OffChainModifyUserData(userWallet.address, payload)
+		OffChainModifyUserData(lensProfile.handle, payload)
 			.then((response) => {
 				console.log(response)
 			})
@@ -461,7 +461,7 @@ const LensProfile = () => {
 																className="flex gap-3 items-center"
 															>
 																<Image
-																	src={`icons/${social.name}.svg`}
+																	src={`/icons/${social.name}.svg`}
 																	width="30"
 																	height="30"
 																	alt={`${social.name} Icon`}

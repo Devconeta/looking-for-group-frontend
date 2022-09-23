@@ -53,15 +53,7 @@ const UserProfile = ({ props }) => {
 		userTeams,
 		tagOptions,
 		roleOptions,
-		timezones = [
-			'GMT-3',
-			'GMT-2',
-			'GMT-1',
-			'GMT',
-			'GMT+1',
-			'GMT+2',
-			'GMT+3',
-		],
+		timezoneOptions,
 		getAppData,
 		loadingAppData,
 	} = useContext(OffChainContext)
@@ -153,10 +145,10 @@ const UserProfile = ({ props }) => {
 			avatar: base64avatar,
 			cover: base64cover,
 			socialLinks: [
-				e.target.discord.value,
-				e.target.twitter.value,
-				e.target.github.value,
-				e.target.linkedin.value,
+				{ name: 'discord', link: e.target.discord.value },
+				{ name: 'twitter', link: e.target.twitter.value },
+				{ name: 'github', link: e.target.github.value },
+				{ name: 'linkedin', link: e.target.linkedin.value },
 			],
 			level: e.target.level.value,
 			timezone: e.target.timezone.value,
@@ -178,6 +170,7 @@ const UserProfile = ({ props }) => {
 					coverURL: '',
 				})
 				getAppData()
+				setEditMode(false)
 			})
 	}
 
@@ -236,12 +229,13 @@ const UserProfile = ({ props }) => {
 						) : (
 							<div className="h-60 w-full bg-neutral-900">
 								<div className="relative flex w-full h-full items-center justify-center">
-									{userData.cover && (
+									{userData?.cover && (
 										<Image
 											layout="fill"
 											objectFit="cover"
 											src={userData.cover}
 											alt="profile avatar"
+											priority={true}
 										/>
 									)}
 								</div>
@@ -297,7 +291,7 @@ const UserProfile = ({ props }) => {
 							</div>
 						) : (
 							<div className="absolute h-48 w-48 translate-y-[-80%] translate-x-[20%] rounded-full border-[2px] border-black bg-neutral-900">
-								{userData.avatar && (
+								{userData?.avatar && (
 									<Image
 										layout="fill"
 										objectFit="cover"
@@ -365,20 +359,26 @@ const UserProfile = ({ props }) => {
 											{...defaultValuesRole}
 										/>
 									) : (
-										<div className="flex flex-row flex-wrap min-w-[10rem] max-w-[20rem] h-fit max-h-[9rem] border-[1px] border-white/80 rounded-lg shadow-lg mt-1 bg-[rgba(10,60,0,0.8)] gap-1 p-2 overflow-y-scroll">
-											{userData?.roles.map(
-												(role, index) => {
-													return (
-														<p
-															key={index}
-															className="w-fit h-fit text-sm text-black px-2 py-1 rounded-sm bg-white/80"
-														>
-															{role}
-														</p>
-													)
-												}
+										<>
+											{userData.roles?.length > 0 ? (
+												<div className="flex flex-row flex-wrap min-w-[10rem] max-w-[20rem] h-fit max-h-[9rem] border-[1px] border-white/80 rounded-lg shadow-lg mt-1 bg-[rgba(10,60,0,0.8)] gap-1 p-2 overflow-y-scroll">
+													{userData.roles.map(
+														(role, index) => {
+															return (
+																<p
+																	key={index}
+																	className="w-fit h-fit text-sm text-black px-2 py-1 rounded-sm bg-white/80"
+																>
+																	{role}
+																</p>
+															)
+														}
+													)}
+												</div>
+											) : (
+												<p>No roles settled</p>
 											)}
-										</div>
+										</>
 									)}
 								</span>
 
@@ -424,7 +424,7 @@ const UserProfile = ({ props }) => {
 											className="inputStandard"
 											defaultValue={userData?.timezone}
 										>
-											{timezones
+											{timezoneOptions
 												.sort()
 												.map((timezone, index) => {
 													return (
@@ -466,20 +466,26 @@ const UserProfile = ({ props }) => {
 											{...defaultValuesTag}
 										/>
 									) : (
-										<div className="flex flex-row flex-wrap min-w-[10rem] max-w-[20rem] h-fit max-h-[9rem] border-[1px] border-white/80 rounded-lg shadow-lg mt-1 bg-[rgba(10,60,0,0.8)] gap-1 p-2 overflow-y-scroll">
-											{userData?.tags.map(
-												(tag, index) => {
-													return (
-														<p
-															key={index}
-															className="w-fit h-fit text-sm text-black px-2 py-1 rounded-sm bg-white/80"
-														>
-															{tag}
-														</p>
-													)
-												}
+										<>
+											{userData.tags?.length > 0 ? (
+												<div className="flex flex-row flex-wrap min-w-[10rem] max-w-[20rem] h-fit max-h-[9rem] border-[1px] border-white/80 rounded-lg shadow-lg mt-1 bg-[rgba(10,60,0,0.8)] gap-1 p-2 overflow-y-scroll">
+													{userData.tags.map(
+														(tag, index) => {
+															return (
+																<p
+																	key={index}
+																	className="w-fit h-fit text-sm text-black px-2 py-1 rounded-sm bg-white/80"
+																>
+																	{tag}
+																</p>
+															)
+														}
+													)}
+												</div>
+											) : (
+												<p>No interests setted</p>
 											)}
-										</div>
+										</>
 									)}
 								</span>
 
@@ -534,6 +540,10 @@ const UserProfile = ({ props }) => {
 											<input
 												id="discord"
 												className="inputStandard"
+												defaultValue={
+													userData.socialLinks[0]
+														?.link
+												}
 											/>
 											<button
 												type="submit"
@@ -553,6 +563,10 @@ const UserProfile = ({ props }) => {
 											<input
 												id="github"
 												className="inputStandard"
+												defaultValue={
+													userData.socialLinks[1]
+														?.link
+												}
 											/>
 										</span>
 
@@ -566,6 +580,10 @@ const UserProfile = ({ props }) => {
 											<input
 												id="linkedin"
 												className="inputStandard"
+												defaultValue={
+													userData.socialLinks[2]
+														?.link
+												}
 											/>
 										</span>
 
@@ -579,6 +597,10 @@ const UserProfile = ({ props }) => {
 											<input
 												id="twitter"
 												className="inputStandard"
+												defaultValue={
+													userData.socialLinks[3]
+														?.link
+												}
 											/>
 										</span>
 									</div>
@@ -594,7 +616,7 @@ const UserProfile = ({ props }) => {
 																className="flex gap-3 items-center"
 															>
 																<Image
-																	src={`icons/${social.name}.svg`}
+																	src={`/icons/${social.name}.svg`}
 																	width="30"
 																	height="30"
 																	alt={`${social.name} Icon`}

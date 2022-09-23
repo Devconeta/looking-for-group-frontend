@@ -1,53 +1,61 @@
-const NEXT_PUBLIC_BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+const NEXT_PUBLIC_BASE_URL = process.env.NEXT_PUBLIC_BASE_URL
 
 export const OffChainGetUserData = async (address) => {
-  const url = `${NEXT_PUBLIC_BASE_URL}/users/${address}`;
+	const url = `${NEXT_PUBLIC_BASE_URL}/users/${address}`
 
-  const response = await fetch(url);
-  const data = await response.json();
+	const response = await fetch(url)
+	const data = await response.json()
 
-  return data;
-};
+	return data
+}
 
 export const OffChainGetAllTeams = async () => {
-  const url = `${NEXT_PUBLIC_BASE_URL}/teams`;
+	const url = `${NEXT_PUBLIC_BASE_URL}/teams`
 
-  const response = await fetch(url);
-  const data = await response.json();
-  return data;
-};
+	const response = await fetch(url)
+	const data = await response.json()
+	return data
+}
 
 export const OffChainGetUserTeams = async (userAddress) => {
-  const url = `${NEXT_PUBLIC_BASE_URL}/teams?address=${userAddress}`;
+	const url = `${NEXT_PUBLIC_BASE_URL}/teams?address=${userAddress}`
 
-  const response = await fetch(url);
-  const data = await response.json();
-  return data;
-};
+	const response = await fetch(url)
+	const data = await response.json()
+	return data
+}
 
 export const OffChainGetTeamById = async (id) => {
-  const url = `${NEXT_PUBLIC_BASE_URL}/teams/${id}`;
-  const response = await fetch(url);
-  const data = await response.json();
-  return data;
-};
+	const url = `${NEXT_PUBLIC_BASE_URL}/teams/${id}`
+	const response = await fetch(url)
+	const data = await response.json()
+	return data
+}
+
+export const OffchainGetTimezones = async () => {
+	const url = `${NEXT_PUBLIC_BASE_URL}/users/timezones`
+	const response = await fetch(url)
+	const data = await response.json()
+
+	return data
+}
 
 export const OffChainGetTags = async () => {
-  const url = `${NEXT_PUBLIC_BASE_URL}/teams/tags`;
-  const response = await fetch(url);
-  const data = await response.json();
+	const url = `${NEXT_PUBLIC_BASE_URL}/teams/tags`
+	const response = await fetch(url)
+	const data = await response.json()
 
-  return data;
-};
+	return data
+}
 
 export const OffChainGetRoles = async () => {
-  const url = `${NEXT_PUBLIC_BASE_URL}/users/roles`;
+	const url = `${NEXT_PUBLIC_BASE_URL}/users/roles`
 
-  const response = await fetch(url);
-  const data = await response.json();
+	const response = await fetch(url)
+	const data = await response.json()
 
-  return data;
-};
+	return data
+}
 
 // export const getTeamsData = async () => {
 //   const response = await fetch("https://www.balldontlie.io/api/v1/teams");
