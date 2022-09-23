@@ -9,24 +9,7 @@ import { truncAddress } from '../../utils/truncAddress'
 import { imageCompressor } from '../../utils/compressor'
 import { convertToBase64 } from '../../utils/convertToBase64'
 import { OffChainModifyUserData } from '../../pages/api/offChain/post.js'
-
-const mockedData = {
-	name: 'lookingForGroup',
-	cover: 'https://ethereum.org/static/28214bb68eb5445dcb063a72535bc90c/9019e/hero.webp',
-	avatar: 'logo.png',
-	roles: ['Frontend & Dapp developer'],
-	tags: [
-		'DeFi',
-		'Web3 Social',
-		'On-chain reputation',
-		'Zero Knowledge Proofs',
-		'Soulbound tokens',
-	],
-	level: 'Intermediate',
-	socialLinks: 'twitter.com/lookingforgroup',
-	timezone: 'GMT-3',
-	idea: 'I want to build a decentralized and interoperable social network for builders  where you can find and create teams, build, win rewards and grow together while pushing the ethereum ecosystem forward.',
-}
+import { useEffect } from 'react'
 
 const customStyles = {
 	option: (provided, state) => ({
@@ -70,7 +53,7 @@ const timezones = [
 	{ value: 'GMT-1', label: 'GMT-1' },
 ]
 
-const UserProfile = () => {
+const UserProfile = ({ props }) => {
 	const { userWallet } = useContext(ContractContext)
 	const {
 		userData,
@@ -94,9 +77,42 @@ const UserProfile = () => {
 	const [compressedAvatar, setCompressedAvatar] = useState('')
 	const [compressedCover, setCompressedCover] = useState('')
 
+	const [defaultValuesTag, setDefaultValuesTag] = useState({})
+	const [defaultValuesRole, setDefaultValuesRole] = useState({})
+
 	const nicknameInput = useRef()
 
-	console.log(userData)
+	useEffect(() => {
+		if (Object.keys(userData).length > 0) {
+			let defaultRoles
+			let defaultTags
+
+			if (userData.tags.length > 0) {
+				defaultTags = userData.tags.map((tag) => {
+					return { value: tag, label: tag }
+				})
+			}
+
+			if (userData.roles.length > 0) {
+				defaultRoles = userData.roles.map((role) => {
+					return { value: role, label: role }
+				})
+			}
+
+			if (defaultRoles.length > 0 && defaultTags.length > 0) {
+				setDefaultValuesRole({ defaultValue: defaultRoles })
+				setDefaultValuesTag({ defaultValue: defaultTags })
+			} else if (defaultRoles.length > 0) {
+				setDefaultValuesRole({ defaultValue: defaultRoles })
+			} else if (defaultTags.length > 0) {
+				setDefaultValuesTag({ defaultValue: defaultTags })
+			}
+		}
+	}, [userData])
+
+	useEffect(() => {
+		setImagesObjectURL({ avatarURL: '', coverURL: '' })
+	}, [editMode])
 
 	const imageHandler = (event) => {
 		if (event.target.value.length > 0) {
@@ -156,9 +172,20 @@ const UserProfile = () => {
 			tags: tags,
 		}
 
-		OffChainModifyUserData(userWallet.address, payload).then((response) => {
-			console.log(response)
-		})
+		OffChainModifyUserData(userWallet.address, payload)
+			.then((response) => {
+				console.log(response)
+			})
+			.catch((error) => {
+				console.log(error)
+			})
+			.finally(() => {
+				setImagesObjectURL({
+					avatarURL: '',
+					coverURL: '',
+				})
+				getAppData()
+			})
 	}
 
 	return (
@@ -341,16 +368,23 @@ const UserProfile = () => {
 											closeMenuOnSelect={false}
 											isMulti
 											isSearchable={false}
+											{...defaultValuesRole}
 										/>
 									) : (
-										<p className>
-											{userData?.length > 0
-												? userData.map(
-														(item, index) =>
-															item + ' '
-												  )
-												: 'No role setted'}
-										</p>
+										<div className="flex flex-row flex-wrap min-w-[10rem] max-w-[20rem] h-fit max-h-[9rem] border-[1px] border-white/80 rounded-lg shadow-lg mt-1 bg-[rgba(10,60,0,0.8)] gap-1 p-2 overflow-y-scroll">
+											{userData?.roles.map(
+												(role, index) => {
+													return (
+														<p
+															key={index}
+															className="w-fit h-fit text-sm text-black px-2 py-1 rounded-sm bg-white/80"
+														>
+															{role}
+														</p>
+													)
+												}
+											)}
+										</div>
 									)}
 								</span>
 
@@ -363,14 +397,17 @@ const UserProfile = () => {
 											id="level"
 											className="inputStandard"
 										>
-											<option value="junior">
-												Junior
+											<option value="NEWBIE">
+												Newbie
 											</option>
-											<option value="intermediate">
+											<option value="BEGINNER">
+												Beginner
+											</option>
+											<option value="INTERMEDIATE">
 												Intermediate
 											</option>
-											<option value="advanced">
-												advanced
+											<option value="EXPERT">
+												Expert
 											</option>
 										</select>
 									) : (
@@ -423,22 +460,23 @@ const UserProfile = () => {
 											closeMenuOnSelect={false}
 											isMulti
 											isSearchable={false}
+											{...defaultValuesTag}
 										/>
 									) : (
-										<p className>
-											{userData.tags?.length > 0
-												? userData.tags?.map(
-														(tag, index) =>
-															tag.toString() +
-															(index ==
-															userData.tags
-																.length -
-																1
-																? ' '
-																: ', ')
-												  )
-												: 'No interests setted'}
-										</p>
+										<div className="flex flex-row flex-wrap min-w-[10rem] max-w-[20rem] h-fit max-h-[9rem] border-[1px] border-white/80 rounded-lg shadow-lg mt-1 bg-[rgba(10,60,0,0.8)] gap-1 p-2 overflow-y-scroll">
+											{userData?.tags.map(
+												(tag, index) => {
+													return (
+														<p
+															key={index}
+															className="w-fit h-fit text-sm text-black px-2 py-1 rounded-sm bg-white/80"
+														>
+															{tag}
+														</p>
+													)
+												}
+											)}
+										</div>
 									)}
 								</span>
 
@@ -540,11 +578,39 @@ const UserProfile = () => {
 										</span>
 									</div>
 								) : (
-									<p className="">
-										{userData.socialLinks
-											? userData.socialLinks
-											: 'Social links not setted'}
-									</p>
+									<>
+										{userData.socialLinks?.length > 0 ? (
+											<div className="flex flex-col gap-3 mt-2">
+												{userData.socialLinks.map(
+													(social, index) => {
+														return (
+															<span
+																key={index}
+																className="flex gap-3 items-center"
+															>
+																<Image
+																	src={`icons/${social.name}.svg`}
+																	width="30"
+																	height="30"
+																	alt={`${social.name} Icon`}
+																/>
+																<input
+																	id="github"
+																	className="inputStandard"
+																	disabled
+																	value={
+																		social.link
+																	}
+																/>
+															</span>
+														)
+													}
+												)}
+											</div>
+										) : (
+											<p>No social links setted</p>
+										)}
+									</>
 								)}
 							</span>
 						</form>
