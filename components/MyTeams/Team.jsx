@@ -7,9 +7,9 @@ const Team = ({ team, setEditMode }) => {
 
 	return (
 		// TEAM CONTAINER
-		<div className="flex min-h-[26rem] h-full w-full rounded-xl border-[1px] border-white/30 bg-black/30 p-8 text-primaryLight backdrop-blur-lg">
+		<div className="flex h-full w-full items-center justify-center rounded-xl border-[1px] border-white/30 bg-black/30 p-8 text-primaryLight backdrop-blur-lg">
 			{/* TEAM  MODE  */}
-			<div>
+			<div className="h-full w-full">
 				{!treasuryMode ? (
 					<TeamMode
 						team={team}

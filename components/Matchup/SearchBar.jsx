@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react'
 import { OffChainGetAllTeamsFiltered } from '../../pages/api/offChain/get'
 import Select from 'react-select'
 import { OffChainContext } from '../../context/offchainContext'
-
 const customStyles = {
 	option: (provided, state) => ({
 		...provided,
