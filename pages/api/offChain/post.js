@@ -56,13 +56,14 @@ export const OffChainEditTeam = async (teamData, teamId) => {
 	return data
 }
 
-export const OffChainSetAddressTeam = async (id, address, name) => {
+export const OffChainSetAddressTeam = async (id, address, name, maxMembers) => {
 	const url = `${NEXT_PUBLIC_BASE_URL}/teams/${id}`
 
 	const payload = {
 		address: address,
 		name: name,
 		isContractDeployed: true,
+		maxMembers: maxMembers,
 	}
 
 	const response = await fetch(url, {
@@ -78,11 +79,11 @@ export const OffChainSetAddressTeam = async (id, address, name) => {
 }
 
 export const OffChainJoinTeam = async (address, teamId) => {
-	const url = `${NEXT_PUBLIC_BASE_URL}/teams/apply`
+	const url = `${NEXT_PUBLIC_BASE_URL}/teams/join`
 
 	const payload = {
 		address: address,
-		teamId: teamId,
+		code: teamId,
 	}
 
 	const response = await fetch(url, {

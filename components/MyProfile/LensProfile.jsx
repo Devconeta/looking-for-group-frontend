@@ -233,7 +233,7 @@ const LensProfile = () => {
 										/>
 									) : (
 										<div className="flex flex-row flex-wrap min-w-[10rem] max-w-[20rem] h-fit max-h-[9rem] border-[1px] border-white/80 rounded-lg shadow-lg mt-1 bg-[rgba(10,60,0,0.8)] gap-1 p-2 overflow-y-scroll">
-											{userData?.roles.map(
+											{userData?.roles?.map(
 												(role, index) => {
 													return (
 														<p
@@ -334,7 +334,7 @@ const LensProfile = () => {
 										/>
 									) : (
 										<div className="flex flex-row flex-wrap min-w-[10rem] max-w-[20rem] h-fit max-h-[9rem] border-[1px] border-white/80 rounded-lg shadow-lg mt-1 bg-[rgba(10,60,0,0.8)] gap-1 p-2 overflow-y-scroll">
-											{userData?.tags.map(
+											{userData?.tags?.map(
 												(tag, index) => {
 													return (
 														<p

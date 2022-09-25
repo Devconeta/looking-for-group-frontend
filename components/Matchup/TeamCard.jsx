@@ -120,73 +120,77 @@ const TeamCard = ({ team, userData }) => {
 		<>
 			<ToastContainer limit={2} />
 
-			<div className="relative mx-5 flex flex-col items-center p-8 2xl:mx-7 ">
-				<h3 className="absolute top-[1.4rem] text-xl text-white">
-					{team.name}
-				</h3>
+			<div className="flex flex-col items-center justify-center mt-16">
+				<div className="relative mx-5  flex flex-col items-center p-8 2xl:mx-7 ">
+					<h3 className="absolute top-[1.4rem] text-xl text-white">
+						{team.name}
+					</h3>
 
-				{/* MEDIA QUERYES */}
-				<div className="flex 2xl:hidden">
-					<Image
-						className="relative"
-						width="185%"
-						height="185%"
-						src="/orb.png"
-						alt="Team Orb"
-					/>
-				</div>
-				<div className="hidden 2xl:flex">
-					<Image
-						className="relative"
-						width="210%"
-						height="210%"
-						src="/orb.png"
-						alt="Team Orb"
-					/>
-				</div>
-				<div className="absolute bottom-[0.6rem] text-[1.4rem]">
-					{team.members.length + '/' + team.maxMembers}
-				</div>
-				{/* MEDIA QUERYES */}
-
-				{orbs.map((orb, index) => (
-					<div
-						key={index}
-						className={`absolute top-[50%] right-[0] ${orb.position}`}
-					>
-						<Tooltip
-							contentColor=""
-							color="invert"
-							content={
-								<div className="flex flex-col">
-									<h3 className="text-lg text-primary">
-										{orb.title}
-									</h3>
-									<p className="!font-Lusitana tracking-wide text-primaryLight text-[1rem]  2xl:text-lg">
-										{orb.content}
-									</p>
-								</div>
-							}
-							placement="right"
-						>
-							<span
-								className={`h-8 w-8 rounded-full border-[2px] 2xl:h-10 2xl:w-10  ${
-									orb.match == 2
-										? 'border-green-500/50'
-										: orb.match == 1
-										? 'border-yellow-500/50'
-										: orb.match == 0
-										? 'border-white/20'
-										: 'border-red-500/50'
-								} flex items-center justify-center text-lg `}
-							>
-								{orb.icon}
-							</span>
-						</Tooltip>
+					{/* MEDIA QUERYES */}
+					<div className="flex 2xl:hidden">
+						<Image
+							className="relative"
+							width="185%"
+							height="185%"
+							src="/orb.png"
+							alt="Team Orb"
+						/>
 					</div>
-				))}
+					<div className="hidden 2xl:flex">
+						<Image
+							className="relative"
+							width="210%"
+							height="210%"
+							src="/orb.png"
+							alt="Team Orb"
+						/>
+					</div>
+					<div className="absolute bottom-[0.6rem] text-[1.4rem]">
+						{team.members.length + '/' + team.maxMembers}
+					</div>
+					{/* MEDIA QUERYES */}
 
-				<button onClick={applyTeamHandler} className="btn--golden">
+					{orbs.map((orb, index) => (
+						<div
+							key={index}
+							className={`absolute top-[50%] right-[0] ${orb.position}`}
+						>
+							<Tooltip
+								contentColor=""
+								color="invert"
+								content={
+									<div className="flex flex-col">
+										<h3 className="text-lg text-primary">
+											{orb.title}
+										</h3>
+										<p className="!font-Lusitana tracking-wide text-primaryLight text-[1rem]  2xl:text-lg">
+											{orb.content}
+										</p>
+									</div>
+								}
+								placement="right"
+							>
+								<span
+									className={`h-8 w-8 rounded-full border-[2px] 2xl:h-10 2xl:w-10  ${
+										orb.match == 2
+											? 'border-green-500/50'
+											: orb.match == 1
+											? 'border-yellow-500/50'
+											: orb.match == 0
+											? 'border-white/20'
+											: 'border-red-500/50'
+									} flex items-center justify-center text-lg `}
+								>
+									{orb.icon}
+								</span>
+							</Tooltip>
+						</div>
+					))}
+				</div>
+				<button
+					onClick={applyTeamHandler}
+					className="btn--golden mt-2 ml-4"
+				>
 					APPLY TEAM
 				</button>
 			</div>

@@ -2,7 +2,7 @@ import React from 'react'
 
 const functions = [
 	{
-		title: 'Match making',
+		title: 'Matchmaking',
 		description: [
 			'Look for your ideal party members. Create your team or join an already created one.',
 			'Maybe you are a solo-hacker looking for designers and business planners.',
