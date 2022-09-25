@@ -77,12 +77,12 @@ export const OffChainSetAddressTeam = async (id, address, name) => {
 	return data
 }
 
-export const OffChainJoinTeam = async (address, code) => {
-	const url = `${NEXT_PUBLIC_BASE_URL}/teams/join`
+export const OffChainJoinTeam = async (address, teamId) => {
+	const url = `${NEXT_PUBLIC_BASE_URL}/teams/apply`
 
 	const payload = {
 		address: address,
-		code: code,
+		teamId: teamId,
 	}
 
 	const response = await fetch(url, {
