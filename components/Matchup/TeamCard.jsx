@@ -120,9 +120,13 @@ const TeamCard = ({ team, userData }) => {
 		<>
 			<ToastContainer limit={2} />
 
-			<div className="flex flex-col items-center justify-center mt-16">
+			<div className="mt-16 flex flex-col items-center justify-center">
 				<div className="relative mx-5  flex flex-col items-center p-8 2xl:mx-7 ">
-					<h3 className="absolute top-[1.4rem] text-xl text-white">
+					<h3
+						className={`absolute ${
+							team.name.length > 20 ? 'top-[0rem]' : 'top-[1rem]'
+						} text-center text-xl text-white`}
+					>
 						{team.name}
 					</h3>
 
@@ -163,7 +167,7 @@ const TeamCard = ({ team, userData }) => {
 										<h3 className="text-lg text-primary">
 											{orb.title}
 										</h3>
-										<p className="!font-Lusitana tracking-wide text-primaryLight text-[1rem]  2xl:text-lg">
+										<p className="!font-Lusitana text-[1rem] tracking-wide text-primaryLight  2xl:text-lg">
 											{orb.content}
 										</p>
 									</div>
@@ -191,7 +195,7 @@ const TeamCard = ({ team, userData }) => {
 					onClick={applyTeamHandler}
 					className="btn--golden mt-2 ml-4"
 				>
-					APPLY TEAM
+					apply
 				</button>
 			</div>
 		</>
