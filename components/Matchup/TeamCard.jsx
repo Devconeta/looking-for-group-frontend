@@ -17,6 +17,10 @@ const TeamCard = ({ team, userData }) => {
 	// 2 -> GOOD
 	// 3 -> BAD
 
+	const applyTeamHandler = () => {
+		// DO SOMETHING
+	}
+
 	const orbs = [
 		{
 			icon: '⚡',
@@ -164,6 +168,10 @@ const TeamCard = ({ team, userData }) => {
 					</Tooltip>
 				</div>
 			))}
+
+			<button onClick={applyTeamHandler} className="btn--golden">
+				APPLY TEAM
+			</button>
 		</div>
 	)
 }
