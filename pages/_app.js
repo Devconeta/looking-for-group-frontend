@@ -28,7 +28,7 @@ export const toastSetter = (message, type) => {
 };
 
 const { chains, provider } = configureChains(
-  [chain.polygonMumbai],
+  [chain.polygonMumbai, chain.mainnet, chain.optimism, chain.polygon],
   [alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_KEY }), publicProvider()]
 );
 
