@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
+import { NewTeamCard } from '../../components/Matchup/NewTeamCard'
 import SearchBar from '../../components/Matchup/SearchBar'
 
 import TeamCard from '../../components/Matchup/TeamCard'
@@ -15,7 +16,14 @@ const Index = () => {
 	useEffect(() => {
 		if (allTeams.length > 0) {
 			const publicTeams = allTeams.filter((team) => team.isPublic)
-			setPublicTeams(publicTeams.reverse())
+			setPublicTeams([
+				...publicTeams,
+				...publicTeams,
+				...publicTeams,
+				...publicTeams,
+				...publicTeams,
+				...publicTeams,
+			])
 		}
 	}, [allTeams])
 
@@ -29,6 +37,11 @@ const Index = () => {
 					)
 				})}
 			</div>
+			{/* <div className="mt-4 flex flex-wrap gap-[1rem] relative w-[calc(100%-5rem)]">
+				{publicTeams.map((team, index) => (
+					<NewTeamCard key={index} team={team} userData={userData} />
+				))}
+			</div> */}
 		</AppContainer>
 	)
 }
