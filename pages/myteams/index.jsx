@@ -28,7 +28,6 @@ const Index = () => {
 	return (
 		<>
 			<ToastContainer limit={2} />
-
 			<CreateTeamModal
 				createTeamModal={createTeamModal}
 				onCloseTeamCreation={onCloseTeamCreation}
@@ -42,7 +41,7 @@ const Index = () => {
 			/>
 
 			<AppContainer className="appContainer--myteams">
-				<div className="flex min-h-[80vh] flex-col gap-8 mb-10">
+				<div className="mb-10 flex min-h-[80vh] flex-col gap-8">
 					<div className="mt-6 flex w-fit flex-row gap-3 px-3 py-2">
 						<button
 							onClick={() => {
